@@ -33,6 +33,11 @@ class User implements UserInterface
      */
     private $password;
 
+    /*
+    * @Assert\EqualTo(propertyPath="password", message="Your confirm password isn't equal to password")
+    */
+    public $confirm_password;
+
     public function getId(): ?int
     {
         return $this->id;
