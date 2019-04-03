@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -138,6 +140,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Messenger", mappedBy="author", orphanRemoval=true)
+     */
+    private $messengers;
+
+    public function __construct()
+    {
+        $this->messengers = new ArrayCollection();
+    }
  
     /**
      * @return string
@@ -153,5 +165,36 @@ class User implements UserInterface
     public function setEmail(?string $email): void
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return Collection|Messenger[]
+     */
+    public function getMessengers(): Collection
+    {
+        return $this->messengers;
+    }
+
+    public function addMessenger(Messenger $messenger): self
+    {
+        if (!$this->messengers->contains($messenger)) {
+            $this->messengers[] = $messenger;
+            $messenger->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessenger(Messenger $messenger): self
+    {
+        if ($this->messengers->contains($messenger)) {
+            $this->messengers->removeElement($messenger);
+            // set the owning side to null (unless already changed)
+            if ($messenger->getAuthor() === $this) {
+                $messenger->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }
