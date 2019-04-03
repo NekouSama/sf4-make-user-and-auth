@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -33,7 +34,7 @@ class User implements UserInterface
      */
     private $password;
 
-    /*
+    /**
     * @Assert\EqualTo(propertyPath="password", message="Your confirm password isn't equal to password")
     */
     public $confirm_password;
@@ -109,5 +110,48 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @var string le token qui servira lors de l'oubli de mot de passe
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $resetToken;
+ 
+    /**
+     * @return string
+     */
+    public function getResetToken(): string
+    {
+        return $this->resetToken;
+    }
+ 
+    /**
+     * @param string $resetToken
+     */
+    public function setResetToken(?string $resetToken): void
+    {
+        $this->resetToken = $resetToken;
+    }
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $email;
+ 
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return (string) $this->email;
+    }
+ 
+    /**
+     * @param string $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
     }
 }

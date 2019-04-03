@@ -2,6 +2,9 @@
 
 {% form_theme form 'materialize_form_theme.html.twig' %}
 
+{% block title %}Subscribe{% endblock %}
+
 {% block body %}
-{{ form(form) }}
+    <h1 class="h3 mb-3 font-weight-normal">Please subscribe</h1>
+    {{ form(form) }}
 {% endblock %}
